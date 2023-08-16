@@ -1,16 +1,28 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Context from "./contex";
 import List from "./list/list";
 import Add from "./list/Add";
+import Load from "./list/load";
 
 function App() {
-  const [itemsList, chen] = React.useState([
-    { id: 1, completed: false, title: "item1" },
-    { id: 2, completed: false, title: "item2" },
-    { id: 3, completed: false, title: "item3" },
-  ]);
+  const [itemsList, chen] = React.useState([]);
+  const [loading, setLoading] =   React.useState(true)
+  useEffect(()=> {
+    fetch('https://jsonplaceholder.typicode.com/todos?_limit=5')
+        .then(response => response.json())
+        .then(itemsList => {
+            setTimeout(() =>{
+                chen(itemsList)
+                setLoading(false)
+            }, 2000)
+
+            
+        })
+
+  }, [])
 
   function toggle(id) {
+
     chen(
       itemsList.map((item) => {
         if (item.id === id) {
@@ -30,8 +42,10 @@ function App() {
     <Context.Provider value={{ removeItem, toggle }}>
       <div className="t1">
         <Add onCreate={addlist} />
+        
         <h1>test</h1>
-        {itemsList.length ? <List items={itemsList} /> : <p>No item</p>}
+        {itemsList.length || loading ? <List items={itemsList} /> : <p>No item</p>}
+        {loading && <Load/>}
       </div>
     </Context.Provider>
   );

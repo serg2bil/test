@@ -4,7 +4,8 @@ import Item from './item'
 const styles = {
     ul: {
         listStyle: 'none',
-        margin: "auto 300px"
+        margin: "auto",
+        maxWidth: '350px'
 
     }
 
